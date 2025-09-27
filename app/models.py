@@ -50,12 +50,13 @@ class SleepRequest(Base):
 
 class FocusSession(Base):
     __tablename__ = "focus_sessions"
+    session_metadata = Column(JSON)
     id = Column(Integer, primary_key=True, index=True)
     student_id = Column(String, index=True, nullable=False)
     start_time = Column(DateTime, nullable=False)
     end_time = Column(DateTime, nullable=True)
     duration_seconds = Column(Integer, nullable=True)
-    metadata = Column(JSON, nullable=True)
+    meta_data = Column(JSON, nullable=True)
 
 class Notice(Base):
     __tablename__ = "notices"
