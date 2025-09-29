@@ -35,7 +35,9 @@ def record_event(db: Session, student_id: str, type: str, timestamp: Optional[da
     return ev
 
 def get_student(db: Session, student_id: str) -> Optional[models.Student]:
-    return db.query(models.Student).filter(models.Student.id == student_id).first()
+    return db.query(models.Student).filter(models.Student.id == student_id,
+        models.Student.ended == False  # ← 이 줄 추가
+    ).first()
 
 def get_today_attendance(db: Session, student_id: str, date_str: str) -> Optional[models.AttendanceRecord]:
     return db.query(models.AttendanceRecord).filter(

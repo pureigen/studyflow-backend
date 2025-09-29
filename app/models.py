@@ -12,6 +12,7 @@ class Student(Base):
     # Default expected times (HH:MM:SS as string)
     expected_check_in = Column(String, default="09:00:00")
     expected_check_out = Column(String, default="18:00:00")
+    ended = Column(Boolean, default=False)  # ← 이 줄 추가
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow)
 
