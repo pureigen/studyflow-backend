@@ -59,20 +59,20 @@ end
   (since an empty list and !EXISTS are not really the same).
 ]]
 local function getTargetQueueList(queueMetaKey, activeKey, waitKey, pausedKey)
-  local queueAttributes = rcall("HMGET", queueMetaKey, "paused", "concurrency")
+  local queueAttributes = rcall("HMGET", queueMetaKey, "paused", "concurrency", "max", "duration")
   if queueAttributes[1] then
-    return pausedKey, true
+    return pausedKey, true, queueAttributes[3], queueAttributes[4]
   else
     if queueAttributes[2] then
       local activeCount = rcall("LLEN", activeKey)
       if activeCount >= tonumber(queueAttributes[2]) then
-        return waitKey, true
+        return waitKey, true, queueAttributes[3], queueAttributes[4]
       else
-        return waitKey, false
+        return waitKey, false, queueAttributes[3], queueAttributes[4]
       end
     end
   end
-  return waitKey, false
+  return waitKey, false, queueAttributes[3], queueAttributes[4]
 end
 if rcall("ZREM", KEYS[1], jobId) == 1 then
     local jobKey = ARGV[1] .. jobId
@@ -91,7 +91,6 @@ if rcall("ZREM", KEYS[1], jobId) == 1 then
     else
         addJobWithPriority(markerKey, KEYS[5], priority, jobId, KEYS[7], isPausedOrMaxed)
     end
-    -- Emit waiting event (wait..ing@token)
     rcall("XADD", KEYS[8], "*", "event", "waiting", "jobId", jobId, "prev",
           "delayed");
     rcall("HSET", jobKey, "delay", 0)
