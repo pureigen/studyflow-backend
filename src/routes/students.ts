@@ -106,4 +106,64 @@ router.get('/', authenticate, async (req: AuthRequest, res) => {
   }
 });
 
+
+// 학부모 자녀 확인 엔드포인트
+router.post('/verify', async (req, res) => {
+  try {
+    const { name, phone } = req.body;
+    
+    if (!name || !phone) {
+      return res.status(400).json({
+        ok: false,
+        message: '자녀 이름과 핸드폰번호를 모두 입력해주세요.'
+      });
+    }
+    
+    const trimmedName = name.trim();
+    if (trimmedName.length < 2) {
+      return res.status(400).json({
+        ok: false,
+        message: '올바른 이름을 입력해주세요.'
+      });
+    }
+    
+    // 전화번호 정규화 (숫자만 추출)
+    const normalizedPhone = phone.replace(/[^\d]/g, '');
+    
+    // students 테이블에서 검색
+    const { data: student } = await supabase
+      .from('students')
+      .select('id, name, phone, username, school, grade, category, gender, ended')
+      .eq('name', trimmedName)
+      .or(`phone.eq.${normalizedPhone},phone.eq.${phone.trim()}`)
+      .maybeSingle();
+    
+    if (!student) {
+      return res.status(404).json({
+        ok: false,
+        message: '자녀분이 존재하지 않습니다.\n학생 회원가입 후 다시 시도해주세요.'
+      });
+    }
+     res.json({
+      ok: true,
+      studentId: student.id,
+      message: '자녀 확인이 완료되었습니다.',
+      student: {
+        name: student.name,
+        school: student.school || '미등록',
+        grade: student.grade || '미등록'
+      }
+    });
+    
+  } catch (error) {
+    console.error('Student verification error:', error);
+    res.status(500).json({
+      ok: false,
+      message: '자녀 확인 중 오류가 발생했습니다.'
+    });
+  }
+  
+});
+
 export default router;
+    
