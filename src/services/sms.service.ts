@@ -2,7 +2,7 @@ import axios from 'axios';
 import FormData from 'form-data';
 import { HttpsProxyAgent } from 'https-proxy-agent';
 
-const proxyUrl = process.env.FIXIE_URL || process.env.HTTPS_PROXY;
+const proxyUrl = process.env.FIXIE_PROXY_URL;
 const agent = proxyUrl ? new HttpsProxyAgent(proxyUrl) : undefined;
 
 // 전화번호 정규화
