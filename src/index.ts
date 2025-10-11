@@ -72,15 +72,13 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
 
 
 
-export default app;
-
 // 로컬 개발용 (Vercel에서는 실행 안 됨)
-if (require.main === module) {
-  const PORT = process.env.PORT || 3000;
+
   app.listen(PORT, () => {
     console.log('========================================');
     console.log(`✅ Server running on port ${PORT}`);
     console.log(`📍 Environment: ${process.env.NODE_ENV || 'development'}`);
     console.log('========================================');
   });
-}
+
+export default app;
