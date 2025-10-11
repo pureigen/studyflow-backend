@@ -13,6 +13,7 @@
   "dependencies": {
     "@prisma/client": "^5.14.0",
     "@supabase/supabase-js": "^2.43.0",
+    "@vercel/node": "^3.2.29",
     "axios": "^1.11.0",
     "bcryptjs": "^2.4.3",
     "bullmq": "^5.1.0",
