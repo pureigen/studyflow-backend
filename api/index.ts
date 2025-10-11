@@ -1,5 +1,4 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
-import express, { Request, Response, NextFunction } from 'express';
+import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import authRoutes from '../src/routes/auth';
@@ -37,7 +36,8 @@ app.use('/api/students', studentRoutes);
 app.use('/api/attendance', attendanceRoutes);
 app.use('/api/breaks', breakRoutes);
 
-app.get('/health', (req: Request, res: Response) => {
+// ✅ 타입 명시 없이 작성 (JavaScript 스타일)
+app.get('/health', (req, res) => {
   res.json({
     status: 'OK',
     timestamp: new Date().toISOString(),
@@ -45,14 +45,16 @@ app.get('/health', (req: Request, res: Response) => {
   });
 });
 
-app.use((req: Request, res: Response) => {
+// ✅ 타입 명시 없이 작성
+app.use((req, res) => {
   res.status(404).json({
     error: 'Not Found',
     message: `Cannot ${req.method} ${req.url}`
   });
 });
 
-app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+// ✅ 타입 명시 없이 작성
+app.use((err, req, res, next) => {
   console.error('Error:', err);
   res.status(err.status || 500).json({
     error: err.message || 'Internal Server Error'

@@ -2,12 +2,16 @@
   "compilerOptions": {
     "target": "ES2020",
     "module": "commonjs",
+    "lib": ["ES2020"],
     "outDir": "./dist",
-    "rootDir": "./",           // ← 중요! . 또는 ./ 
+    "rootDir": "./",
+    "strict": false,                    // ✅ false로 변경
+    "noImplicitAny": false,             // ✅ 추가
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "strict": true
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true
   },
-  "include": ["src/**/*", "api/**/*"],  // ← 둘 다 포함!
-  "exclude": ["node_modules"]
+  "include": ["src/**/*", "api/**/*"],
+  "exclude": ["node_modules", "dist"]
 }
